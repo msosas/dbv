@@ -7,7 +7,10 @@ export default [
       { path: '', component: () => import('pages/index') },
       { path: '/git_status', component: () => import('pages/git-status') },
       { path: '/pull', component: () => import('pages/pull') },
-      { path: '/commit', component: () => import('pages/commit') }
+      { path: '/push', component: () => import('pages/push') },
+      { path: '/commit', component: () => import('pages/commit') },
+      { path: '/apply', component: () => import('pages/apply') },
+      { path: '/setup', component: () => import('pages/setup') }
     ]
   },
 

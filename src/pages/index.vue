@@ -28,7 +28,7 @@
                 <q-icon name="pie_chart" />
               </q-item-tile>
             </q-item-side>
-            <q-item-main :label="connectionInfo.db" />
+            <q-item-main :label="connectionInfo.db.name" />
           </q-item>
         </q-list>
     </div>

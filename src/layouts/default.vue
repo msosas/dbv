@@ -21,7 +21,7 @@
         </q-toolbar-title>
         <q-btn flat round dense icon="home" @click="homeClick()" />
         <q-btn flat round dense icon="storage" @click="selectDb()" />
-        <q-btn flat round dense icon="settings" />
+        <q-btn flat round dense icon="settings" @click="setupClick()"/>
       </q-toolbar>
       <q-toolbar
         color="red-8"
@@ -68,11 +68,11 @@
           <q-item-side icon="done_all" />
           <q-item-main label="Commit" />
         </q-item>
-        <q-item to="/404">
+        <q-item to="/push">
           <q-item-side icon="arrow_upward" />
           <q-item-main label="Push Code" />
         </q-item>
-        <q-item to="/404">
+        <q-item to="/apply">
           <q-item-side icon="call_merge" />
           <q-item-main label="Aplicar Archivos" />
         </q-item>
@@ -115,12 +115,14 @@ export default {
     homeClick () {
       this.$router.push('/')
     },
+    setupClick () {
+      this.$router.push('/setup')
+    },
     checkAPI () {
       Loading.show({ delay: 0 })
       axios.get('http://localhost:4001/check')
         .then(({ data }) => {
           console.log(data)
-          this.getDb()
           Loading.hide()
         })
         .catch(error => {
@@ -129,7 +131,7 @@ export default {
         })
     },
     getDb () {
-      Loading.show({ delay: 1 })
+      Loading.show({ delay: 0 })
       axios.get('http://localhost:4001/show_schemas')
         .then(({ data }) => {
           for (var i = 0; i < data.length; i++) {
@@ -166,22 +168,36 @@ export default {
         .catch(() => {
           console.log('Canceled')
         })
-    },
-    isConnected () {
-      axios.get('http://localhost:4001/get_db')
-        .then(({ data }) => {
-          if (data === 'mysql') {
-            this.connected = false
-          } else {
-            this.connected = true
-            this.dbName = data
-          }
-        })
     }
   },
+  beforeCreate () {
+    axios.get('http://localhost:4001/get_db')
+      .then(({ data }) => {
+        if (data.name === 'mysql') {
+          this.connected = false
+        } else {
+          this.connected = true
+          this.dbName = data.name
+        }
+      })
+  },
   created () {
-    this.checkAPI()
-    this.isConnected()
+    var that = this
+    setInterval(function () {
+      that.checkAPI()
+      axios.get('http://localhost:4001/get_db')
+        .then(({ data }) => {
+          if (data.name === 'mysql') {
+            that.connected = false
+          } else {
+            that.connected = true
+            that.dbName = data.name
+          }
+        })
+    }, 3000)
+  },
+  mounted () {
+    this.getDb()
   }
 }
 </script>

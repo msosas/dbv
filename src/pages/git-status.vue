@@ -2,8 +2,11 @@
     <q-page class="flex justify-center" >
         <div style="width: 60%;">
             <h3 style="text-align: center;">Archivos Cambiados</h3>
+            <span style="float: right;"><q-btn icon="clear_all" label="Descartar" @click="checkout()"/></span>
             <q-list>
-              <q-list-header>Total: {{ files.length }}</q-list-header>
+              <q-list-header>
+                <span>Total: {{ files.length }}</span>
+              </q-list-header>
               <q-item
                 :class="{ 'bg-warning': 'M' === file.type, 'bg-negative': 'D' === file.type, 'bg-positive': '?' === file.type  }"
                 v-for="file in files"
@@ -76,6 +79,19 @@ export default {
             this.changes = ''
           }
           Loading.hide()
+        })
+        .catch(error => {
+          Notify.create('Error:' + error)
+          console.log(error)
+        })
+    },
+    checkout () {
+      axios.get('http://localhost:4001/checkout')
+        .then(({ data }) => {
+          Notify.create({
+            message: 'Cambios Descartados',
+            color: 'positive'
+          })
         })
         .catch(error => {
           Notify.create('Error:' + error)

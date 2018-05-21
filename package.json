@@ -2,7 +2,7 @@
   "name": "dbv",
   "version": "1.0.0",
   "description": "App for Table and SP Version Control",
-  "productName": "db-version-control",
+  "productName": "dbv",
   "cordovaId": "org.cordova.quasar.app",
   "author": "Matias Sosa <matiassosas@gmail.com>",
   "private": true,

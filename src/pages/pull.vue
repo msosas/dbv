@@ -6,13 +6,13 @@
           <q-list-header>Desde Upstream: </q-list-header>
           <q-item>
             <q-item-side right>
-              <q-btn icon="arrow_downward" @click="pullDev()" />
+              <q-btn icon="arrow_downward" @click="pull('development')" />
             </q-item-side>
             <q-item-main label="Development" />
           </q-item>
           <q-item>
             <q-item-side right>
-              <q-btn icon="arrow_downward" @click="pullMaster()" />
+              <q-btn icon="arrow_downward" @click="pull('master')" />
             </q-item-side>
             <q-item-main label="Master" />
           </q-item>
@@ -31,26 +31,9 @@ export default {
     }
   },
   methods: {
-    pullDev () {
+    pull (branch) {
       Loading.show({ delay: 0 })
-      axios.get('http://localhost:4001/pull_from_dev')
-        .then(({ data }) => {
-          if (data !== '') {
-            Notify.create({
-              message: data,
-              color: 'warning'
-            })
-          }
-          Loading.hide()
-        })
-        .catch(error => {
-          Notify.create('Error:' + error)
-          console.log(error)
-        })
-    },
-    pullMaster () {
-      Loading.show({ delay: 0 })
-      axios.get('http://localhost:4001/pull_from_master')
+      axios.get('http://localhost:4001/pull?branch=' + branch)
         .then(({ data }) => {
           if (data !== '') {
             Notify.create({
