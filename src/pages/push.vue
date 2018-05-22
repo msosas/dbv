@@ -46,7 +46,7 @@ export default {
   methods: {
     push (branch) {
       Loading.show({ delay: 0 })
-      axios.get('http://localhost:4001/push', '')
+      axios.post('http://localhost:4001/push', 'localBranch=' + branch)
         .then(({ data }) => {
           if (data !== '') {
             Notify.create({
@@ -59,16 +59,19 @@ export default {
         .catch(error => {
           Notify.create('Error:' + error)
           console.log(error)
+          Loading.hide()
         })
     },
     getBranchs () {
       axios.get('http://localhost:4001/get_branches')
         .then(({ data }) => {
           this.branchs = data
+          if (this.branchs.length === 1) {
+            this.branch = data[0].slice(2)
+          }
         })
     },
     selectBranch (branch) {
-      console.log(branch)
       if (branch[0] === '*') {
         branch = branch.slice(2)
       }
