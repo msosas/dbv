@@ -22,7 +22,9 @@
         <h4 style="text-align: center;">Rollback último commit</h4>
         <q-list>
           <q-item>
-            <q-item-main style="text-align: center;"><q-btn icon="settings_backup_restore" label="Rollback" @click="rollback()" /></q-item-main>
+            <q-item-main style="text-align: center;">
+              <q-btn icon="settings_backup_restore" label="Rollback" @click="rollback()" color="deep-purple" />
+            </q-item-main>
           </q-item>
         </q-list>
     </div>

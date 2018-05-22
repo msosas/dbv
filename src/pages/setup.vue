@@ -7,12 +7,12 @@
           <q-item>
             <q-item-side>
               <q-item-tile icon>
-                <q-icon name="folder" />
+                <q-icon name="folder" size="200%"/>
               </q-item-tile>
             </q-item-side>
             <q-item-main>
               <q-field>
-                <q-input type="file" value palceholder="test" multiple directory webkitdirectory mozdirectory/>
+                <q-input id="path" type="file" value palceholder="test" directory webkitdirectory single />
               </q-field>
             </q-item-main>
           </q-item>

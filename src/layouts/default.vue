@@ -76,7 +76,7 @@
           <q-item-side icon="call_merge" />
           <q-item-main label="Aplicar Archivos" />
         </q-item>
-        <q-item to="/404">
+        <q-item @click.native="generateFiles()">
           <q-item-side icon="note_add" />
           <q-item-main label="Generar Archivos" />
         </q-item>
@@ -119,18 +119,17 @@ export default {
       this.$router.push('/setup')
     },
     checkAPI () {
-      Loading.show({ delay: 0 })
       axios.get('http://localhost:4001/check')
         .then(({ data }) => {
           console.log(data)
-          Loading.hide()
         })
         .catch(error => {
-          Notify.create('Error:' + error)
+          Notify.create(error.toString())
           console.log(error)
+          Loading.hide()
         })
     },
-    getDb () {
+    showSchemas () {
       Loading.show({ delay: 0 })
       axios.get('http://localhost:4001/show_schemas')
         .then(({ data }) => {
@@ -141,8 +140,9 @@ export default {
           Loading.hide()
         })
         .catch(error => {
-          Notify.create('Error:' + error)
+          Notify.create()
           console.log(error)
+          Loading.hide()
         })
     },
     selectDb () {
@@ -158,7 +158,6 @@ export default {
       })
         .then((data) => {
           this.connected = true
-          console.log(data)
           this.dbName = data
           axios.post('http://localhost:4001/set_db', 'db=' + this.dbName)
             .then(({ data }) => {
@@ -167,6 +166,19 @@ export default {
         })
         .catch(() => {
           console.log('Canceled')
+        })
+    },
+    generateFiles () {
+      Loading.show({ delay: 0 })
+      axios.get('http://localhost:4001/generate_files')
+        .then(({ data }) => {
+          Loading.hide()
+          console.log(data)
+        })
+        .catch(error => {
+          Notify.create(error)
+          console.log(error)
+          Loading.hide()
         })
     }
   },
@@ -181,7 +193,8 @@ export default {
         }
       })
   },
-  created () {
+  mounted () {
+    this.showSchemas()
     var that = this
     setInterval(function () {
       that.checkAPI()
@@ -189,15 +202,9 @@ export default {
         .then(({ data }) => {
           if (data.name === 'mysql') {
             that.connected = false
-          } else {
-            that.connected = true
-            that.dbName = data.name
           }
         })
     }, 3000)
-  },
-  mounted () {
-    this.getDb()
   }
 }
 </script>

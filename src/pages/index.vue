@@ -30,6 +30,16 @@
             </q-item-side>
             <q-item-main :label="connectionInfo.db.name" />
           </q-item>
+          <q-item-separator />
+          <q-list-header>Repositorio</q-list-header>
+          <q-item>
+            <q-item-side>
+              <q-item-tile icon>
+                <q-icon name="pie_chart" />
+              </q-item-tile>
+            </q-item-side>
+            <q-item-main :label="connectionInfo.repoPath" />
+          </q-item>
         </q-list>
     </div>
   </q-page>
@@ -45,7 +55,8 @@ export default {
       connectionInfo: {
         server: '',
         port: '',
-        db: ''
+        db: '',
+        repoPath: ''
       }
     }
   },
@@ -54,8 +65,10 @@ export default {
       Loading.show({ delay: 0 })
       axios.get('http://localhost:4001/server_info')
         .then(({ data }) => {
-          this.connectionInfo.server = data[0]
-          this.connectionInfo.port = data[1]
+          console.log(data)
+          this.connectionInfo.repoPath = data[0]
+          this.connectionInfo.server = data[1]
+          this.connectionInfo.port = data[2]
         })
         .catch(error => {
           Notify.create('Error:' + error)
