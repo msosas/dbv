@@ -1,8 +1,11 @@
 <template>
     <q-page class="flex justify-center" >
         <div style="width: 60%;">
-            <h3 style="text-align: center;">Archivos Cambiados</h3>
-            <span style="float: right;"><q-btn icon="clear_all" label="Descartar" @click="checkout()"/></span>
+            <h3 style="text-align: center;">
+              Archivos Cambiados
+              <q-btn icon="autorenew" round @click="refresh()"/>
+            </h3>
+            <span style="float: right;"><q-btn icon="clear_all" color="deep-purple" label="Descartar" @click="checkout()"/></span>
             <q-list>
               <q-list-header>
                 <span>Total: {{ files.length }}</span>
@@ -97,6 +100,13 @@ export default {
           Notify.create('Error:' + error)
           console.log(error)
         })
+    },
+    refresh () {
+      this.$nextTick(function () {
+        Loading.show({ delay: 0 })
+        this.gitStatus()
+        Loading.hide()
+      })
     }
   },
   created () {
