@@ -6,7 +6,7 @@
               <q-btn icon="autorenew" round @click="refresh()"/>
             </h3>
             <span style="float: right;"><q-btn icon="clear_all" color="deep-purple" label="Descartar" @click="checkout()"/></span>
-            <span style="float: right;"><q-btn icon="clear_all" color="positive" label="Commit" @click="goToCommit()"/></span>
+            <span style="float: right;"><q-btn icon="done" color="positive" label="Commit" @click="goToCommit()"/></span>
             <q-list>
               <q-list-header>
                 <span>Total: {{ files.length }}</span>

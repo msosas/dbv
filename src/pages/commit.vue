@@ -44,7 +44,7 @@
           </q-item>
           <q-item style="text-align: center">
             <q-item-main>
-              <q-btn icon="check" label="Push" color="positive" @click="push(branch)"/>
+              <q-btn icon="cloud_upload" label="Push" color="positive" @click="push(branch)"/>
             </q-item-main>
           </q-item>
         </q-list>
