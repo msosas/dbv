@@ -46,7 +46,8 @@ export default {
   },
   methods: {
     push (branch) {
-      Loading.show({ delay: 0 })
+      // Loading.show({ delay: 0 })
+      console.log('test')
       axios.post('http://localhost:4001/push', 'localBranch=' + branch)
         .then(({ data }) => {
           if (data !== '') {

@@ -51,12 +51,10 @@ export default {
       Loading.show({ delay: 0 })
       axios.get('http://localhost:4001/pull?branch=' + branch)
         .then(({ data }) => {
-          if (data !== '') {
-            Notify.create({
-              message: data,
-              color: 'warning'
-            })
-          }
+          Notify.create({
+            message: data,
+            color: 'positive'
+          })
           this.updateSchema()
           Loading.hide()
         })
