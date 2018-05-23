@@ -31,6 +31,22 @@ export default {
     }
   },
   methods: {
+    updateSchema () {
+      Loading.show({ delay: 0 })
+      axios.get('http://localhost:4001/update_schema')
+        .then(({ data }) => {
+          Notify.create({
+            message: 'Schema Local actualizado',
+            color: 'positive'
+          })
+          Loading.hide()
+        })
+        .catch(error => {
+          Notify.create('Error:' + error)
+          console.log(error)
+          Loading.hide()
+        })
+    },
     pull (branch) {
       Loading.show({ delay: 0 })
       axios.get('http://localhost:4001/pull?branch=' + branch)
@@ -41,10 +57,11 @@ export default {
               color: 'warning'
             })
           }
+          this.updateSchema()
           Loading.hide()
         })
         .catch(error => {
-          Notify.create('Error:' + error)
+          Notify.create(error)
           console.log(error)
         })
     }

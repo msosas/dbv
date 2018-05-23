@@ -20,8 +20,18 @@
           <div slot="subtitle">Running on Quasar v{{ $q.version }}</div>
         </q-toolbar-title>
         <q-btn flat round dense icon="home" @click="homeClick()" />
+        <q-btn-dropdown :label="currentBranch">                        <!-- dropdown content -->
+          <q-list link>
+            <q-item v-for="branch in branches" :key="branch" close-overlay @click.native="changeBranch(branch)">
+              <q-item-main>
+                <q-item-tile label>{{ branch }}</q-item-tile>
+              </q-item-main>
+            </q-item>
+          </q-list>
+        </q-btn-dropdown>
         <q-btn flat round dense icon="storage" @click="selectDb()" />
         <q-btn flat round dense icon="settings" @click="setupClick()"/>
+
       </q-toolbar>
       <q-toolbar
         color="red-8"
@@ -72,11 +82,11 @@
           <q-item-side icon="call_merge" />
           <q-item-main label="Aplicar Archivos" />
         </q-item>
-        <q-item to="/404">
+        <q-item to="/404" v-if="false">
           <q-item-side icon="create" />
           <q-item-main label="Revisiones" />
         </q-item>
-        <q-item to="/404">
+        <q-item to="/404" v-if="false">
           <q-item-side icon="compare_arrows" />
           <q-item-main label="Comparar" />
         </q-item>
@@ -97,6 +107,8 @@ export default {
   name: 'LayoutDefault',
   data () {
     return {
+      currentBranch: '',
+      branches: [],
       connected: false,
       dbName: '',
       dbList: [],
@@ -159,6 +171,35 @@ export default {
         .catch(() => {
           console.log('Canceled')
         })
+    },
+    getBranch () {
+      axios.get('http://localhost:4001/get_branches')
+        .then(({ data }) => {
+          console.log(data)
+          for (var i = 0; i < data.length; i++) {
+            if (data[i][0] === '*') {
+              this.currentBranch = data[i].slice(2)
+            }
+          }
+          this.branches = data
+        })
+    },
+    changeBranch (branch) {
+      Loading.show({ delay: 0 })
+      axios.post('http://localhost:4001/change_branch', 'branch=' + branch)
+        .then(({ data }) => {
+          this.currentBranch = branch
+          this.getBranch()
+          Notify.create({
+            message: 'Ahora en ' + branch,
+            color: 'positive'
+          })
+          Loading.hide()
+        })
+        .catch(error => {
+          Notify.create(error)
+          console.log(error)
+        })
     }
   },
   beforeCreate () {
@@ -174,6 +215,7 @@ export default {
   },
   mounted () {
     this.showSchemas()
+    this.getBranch()
     var that = this
     setInterval(function () {
       that.checkAPI()

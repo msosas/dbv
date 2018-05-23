@@ -1,3 +1,4 @@
+<!-- ESTA VISTA NO SE USA!!  -->
 <template>
   <q-page class="flex justify-center" >
       <div style="width: 60%;">

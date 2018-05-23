@@ -2,20 +2,11 @@
     <q-page class="flex justify-center" >
         <div style="width: 60%;">
             <h3 style="text-align: center;">
-              Generar Archivos
-            </h3>
-            <q-list>
-              <q-item>
-                <q-item-main style="text-align: center;">
-                  <q-btn size="lg" color="teal" icon="note_add" @click="generateFiles()"/>
-                </q-item-main>
-              </q-item>
-            </q-list>
-            <h3 style="text-align: center;">
               Archivos Cambiados
               <q-btn icon="autorenew" round @click="refresh()"/>
             </h3>
             <span style="float: right;"><q-btn icon="clear_all" color="deep-purple" label="Descartar" @click="checkout()"/></span>
+            <span style="float: right;"><q-btn icon="clear_all" color="positive" label="Commit" @click="goToCommit()"/></span>
             <q-list>
               <q-list-header>
                 <span>Total: {{ files.length }}</span>
@@ -73,6 +64,9 @@ export default {
     }
   },
   methods: {
+    goToCommit () {
+      this.$router.push('/commit')
+    },
     gitStatus () {
       Loading.show({ delay: 0 })
       axios.get('http://localhost:4001/status_raw')
@@ -103,28 +97,8 @@ export default {
           console.log(error)
         })
     },
-    checkout () {
-      axios.get('http://localhost:4001/checkout')
-        .then(({ data }) => {
-          Notify.create({
-            message: 'Cambios Descartados',
-            color: 'positive'
-          })
-        })
-        .catch(error => {
-          Notify.create('Error:' + error)
-          console.log(error)
-        })
-    },
-    refresh () {
-      this.$nextTick(function () {
-        Loading.show({ delay: 0 })
-        this.gitStatus()
-        Loading.hide()
-      })
-    },
     generateFiles () {
-      Loading.show({ delay: 0 })
+      // Loading.show({ delay: 0 })
       axios.get('http://localhost:4001/generate_files')
         .then(({ data }) => {
           Loading.hide()
@@ -133,11 +107,37 @@ export default {
         .catch(error => {
           Notify.create(error)
           console.log(error)
+          // Loading.hide()
+        })
+    },
+    refresh () {
+      Loading.show({ delay: 0 })
+      var that = this
+      this.$nextTick(function () {
+        setTimeout(function () {
+          that.generateFiles()
+          that.gitStatus()
           Loading.hide()
+        }, 1000)
+      })
+    },
+    checkout () {
+      axios.get('http://localhost:4001/checkout')
+        .then(({ data }) => {
+          Notify.create({
+            message: 'Cambios Descartados',
+            color: 'positive'
+          })
+          this.refresh()
+        })
+        .catch(error => {
+          Notify.create('Error:' + error)
+          console.log(error)
         })
     }
   },
   created () {
+    this.generateFiles()
     this.gitStatus()
   }
 }

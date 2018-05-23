@@ -16,13 +16,6 @@
           <q-item>
             <q-item-main style="text-align: center;">
               <q-btn icon="check" label="Aplicar" color="positive" @click="commit()"/>
-            </q-item-main>
-          </q-item>
-        </q-list>
-        <h4 style="text-align: center;">Rollback último commit</h4>
-        <q-list>
-          <q-item>
-            <q-item-main style="text-align: center;">
               <q-btn icon="settings_backup_restore" label="Rollback" @click="rollback()" color="deep-purple" />
             </q-item-main>
           </q-item>
@@ -38,7 +31,7 @@
               <q-btn-dropdown label="Branch">
                 <!-- dropdown content -->
                 <q-list link>
-                  <q-item v-for="branch in branchs" :key="branch" close-overlay @click.native="selectBranch(branch)">
+                  <q-item v-for="branch in branches" :key="branch" close-overlay @click.native="selectBranch(branch)">
                     <q-item-main>
                       <q-item-tile label>{{ branch }}</q-item-tile>
                     </q-item-main>
@@ -67,7 +60,7 @@ export default {
     return {
       message: '',
       branch: '',
-      branchs: []
+      branches: []
     }
   },
   methods: {
@@ -131,12 +124,14 @@ export default {
           Loading.hide()
         })
     },
-    getBranchs () {
+    getBranches () {
       axios.get('http://localhost:4001/get_branches')
         .then(({ data }) => {
-          this.branchs = data
-          if (this.branchs.length === 1) {
-            this.branch = data[0].slice(2)
+          this.branches = data
+          for (var i = 0; i < this.branches.length; i++) {
+            if (this.branches[i][0] === '*') {
+              this.branch = this.branches[i].slice(2)
+            }
           }
         })
     },
@@ -148,7 +143,7 @@ export default {
     }
   },
   created () {
-    this.getBranchs()
+    this.getBranches()
   }
 }
 </script>
