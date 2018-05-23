@@ -31,20 +31,24 @@
                 </q-item-side>
               </q-item>
             </q-list>
-            <q-modal v-model="diffOpened" style="text-align: center;" >
-              <h4>Diferencias</h4>
+            <q-modal v-model="diffOpened">
+              <h4 style="text-align: center;">Diferencias</h4>
               <p
+                style="padding-left: 2%;"
                 v-for="change in changes"
                 :key="change"
                 :class="{ 'new-line': change[0] === '+', 'removed-line': change[0] === '-' }"
+                v-html="change"
               >
               {{ change }}
               </p>
-              <q-btn
-                color="blue-grey-8"
-                @click="diffOpened = false"
-                label="Close"
-              />
+              <div style="text-align: center;">
+                <q-btn
+                  color="blue-grey-8"
+                  @click="diffOpened = false"
+                  label="Close"
+                />
+              </div>
             </q-modal>
         </div>
     </q-page>
@@ -86,6 +90,7 @@ export default {
       this.diffOpened = true
       axios.get('http://localhost:4001/differences?file=' + file)
         .then(({data}) => {
+          console.log(data)
           if (data[0] !== '') {
             this.changes = data
           } else {
