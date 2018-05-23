@@ -35,7 +35,7 @@
           <q-item>
             <q-item-side>
               <q-item-tile icon>
-                <q-icon name="pie_chart" />
+                <q-icon name="folder_open" />
               </q-item-tile>
             </q-item-side>
             <q-item-main :label="connectionInfo.repoPath" />

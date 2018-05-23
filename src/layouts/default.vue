@@ -65,20 +65,12 @@
           <q-item-main label="Pull Code" />
         </q-item>
         <q-item to="/commit">
-          <q-item-side icon="done_all" />
-          <q-item-main label="Commit" />
-        </q-item>
-        <q-item to="/push">
           <q-item-side icon="arrow_upward" />
           <q-item-main label="Push Code" />
         </q-item>
         <q-item to="/apply">
           <q-item-side icon="call_merge" />
           <q-item-main label="Aplicar Archivos" />
-        </q-item>
-        <q-item @click.native="generateFiles()">
-          <q-item-side icon="note_add" />
-          <q-item-main label="Generar Archivos" />
         </q-item>
         <q-item to="/404">
           <q-item-side icon="create" />
@@ -166,19 +158,6 @@ export default {
         })
         .catch(() => {
           console.log('Canceled')
-        })
-    },
-    generateFiles () {
-      Loading.show({ delay: 0 })
-      axios.get('http://localhost:4001/generate_files')
-        .then(({ data }) => {
-          Loading.hide()
-          console.log(data)
-        })
-        .catch(error => {
-          Notify.create(error)
-          console.log(error)
-          Loading.hide()
         })
     }
   },

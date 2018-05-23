@@ -2,6 +2,16 @@
     <q-page class="flex justify-center" >
         <div style="width: 60%;">
             <h3 style="text-align: center;">
+              Generar Archivos
+            </h3>
+            <q-list>
+              <q-item>
+                <q-item-main style="text-align: center;">
+                  <q-btn size="lg" color="teal" icon="note_add" @click="generateFiles()"/>
+                </q-item-main>
+              </q-item>
+            </q-list>
+            <h3 style="text-align: center;">
               Archivos Cambiados
               <q-btn icon="autorenew" round @click="refresh()"/>
             </h3>
@@ -107,6 +117,19 @@ export default {
         this.gitStatus()
         Loading.hide()
       })
+    },
+    generateFiles () {
+      Loading.show({ delay: 0 })
+      axios.get('http://localhost:4001/generate_files')
+        .then(({ data }) => {
+          Loading.hide()
+          console.log(data)
+        })
+        .catch(error => {
+          Notify.create(error)
+          console.log(error)
+          Loading.hide()
+        })
     }
   },
   created () {
