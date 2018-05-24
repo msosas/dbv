@@ -121,8 +121,8 @@ export default {
       axios.post(baseUrl + '/push', 'localBranch=' + branch)
         .then(({ data }) => {
           Notify.create({
-            message: data,
-            color: 'warning'
+            message: 'OK',
+            color: 'positive'
           })
           Loading.hide()
         })
