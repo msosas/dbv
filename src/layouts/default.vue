@@ -4,7 +4,7 @@
       <q-toolbar
         color="blue-grey-8"
         :inverted="$q.theme === 'ios'"
-        v-if="connected"
+        v-if="connected&&apiStarted"
       >
         <q-btn
           flat
@@ -35,7 +35,7 @@
       </q-toolbar>
       <q-toolbar
         color="red-8"
-        v-if="!connected"
+        v-if="!(connected&&apiStarted)"
       >
         <q-btn
           flat
@@ -93,7 +93,7 @@
       </q-list>
     </q-layout-drawer>
 
-    <q-page-container v-if="connected">
+    <q-page-container v-if="connected&&apiStarted">
       <router-view />
     </q-page-container>
   </q-layout>
@@ -108,6 +108,7 @@ export default {
   name: 'LayoutDefault',
   data () {
     return {
+      apiStarted: false,
       currentBranch: '',
       branches: [],
       connected: false,
@@ -126,11 +127,13 @@ export default {
     checkAPI () {
       axios.get(baseUrl + '/check')
         .then(({ data }) => {
+          this.apiStarted = true
           console.log(data)
         })
         .catch(error => {
           Notify.create('No se detectó la API')
           console.log(error)
+          this.apiStarted = false
           Loading.hide()
         })
     },
@@ -218,6 +221,13 @@ export default {
           this.dbName = data.name
         }
       })
+  },
+  watch: {
+    apiStarted () {
+      if (this.apiStarted) {
+        this.showSchemas()
+      }
+    }
   },
   mounted () {
     this.showSchemas()
