@@ -1,12 +1,14 @@
 <template>
     <q-page class="flex justify-center" >
-        <div style="width: 60%;">
+        <div style="width: 80%;">
             <h3 style="text-align: center;">
               Archivos Cambiados
-              <q-btn icon="autorenew" round @click="refresh()"/>
             </h3>
-            <span style="float: right;"><q-btn icon="clear_all" color="deep-purple" label="Descartar" @click="checkout()"/></span>
-            <span style="float: right;"><q-btn icon="done" color="positive" label="Commit" @click="goToCommit()"/></span>
+            <div style="text-align: center;">
+              <span><q-btn icon="clear_all" color="deep-purple" label="Descartar" @click="checkout()"/></span>
+              <span><q-btn icon="done" color="positive" label="Commit" @click="goToCommit()"/></span>
+              <span><q-btn icon="autorenew" color="dark" label="Actualizar" @click="refresh()"/></span>
+            </div>
             <q-list>
               <q-list-header>
                 <span>Total: {{ files.length }}</span>
@@ -157,8 +159,7 @@ export default {
     }
   },
   created () {
-    this.generateFiles()
-    this.gitStatus()
+    this.refresh()
   }
 }
 </script>

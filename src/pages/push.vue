@@ -1,7 +1,7 @@
 <!-- ESTA VISTA NO SE USA!!  -->
 <template>
   <q-page class="flex justify-center" >
-      <div style="width: 60%;">
+      <div style="width: 80%;">
         <h3 style="text-align: center;">Actualizar Repositorio Remoto</h3>
         <q-list>
           <q-list-header>Desde el local: </q-list-header>

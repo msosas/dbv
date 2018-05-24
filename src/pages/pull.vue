@@ -1,6 +1,6 @@
 <template>
   <q-page class="flex justify-center" >
-      <div style="width: 60%;">
+      <div style="width: 80%;">
         <h3 style="text-align: center;">Actualizar Repositorio Local</h3>
         <q-list>
           <q-list-header>Desde Upstream: </q-list-header>

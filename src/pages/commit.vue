@@ -1,6 +1,6 @@
 <template>
   <q-page class="flex justify-center" >
-      <div style="width: 60%;">
+      <div style="width: 80%;">
         <h3 style="text-align: center;">Commit</h3>
         <q-list>
           <q-list-header>Mensaje</q-list-header>
