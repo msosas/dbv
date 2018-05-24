@@ -3,7 +3,7 @@
     <div>
         <h3>Estado de la Conexión</h3>
         <q-list highlight>
-          <q-list-header>Servidor</q-list-header>
+          <q-list-header>MySQL</q-list-header>
           <q-item>
             <q-item-side>
               <q-item-tile icon>
@@ -46,6 +46,7 @@
 </template>
 
 <script>
+var baseUrl = 'http://localhost:4001'
 import axios from 'axios'
 import { Notify, Loading } from 'quasar'
 export default {
@@ -63,7 +64,7 @@ export default {
   methods: {
     connectionStatus () {
       Loading.show({ delay: 0 })
-      axios.get('http://localhost:4001/server_info')
+      axios.get(baseUrl + '/server_info')
         .then(({ data }) => {
           console.log(data)
           this.connectionInfo.repoPath = data[0]
@@ -74,7 +75,7 @@ export default {
           Notify.create('Error:' + error)
           console.log(error)
         })
-      axios.get('http://localhost:4001/get_db')
+      axios.get(baseUrl + '/get_db')
         .then(({ data }) => {
           if (data === 'mysql') {
             this.connected = false

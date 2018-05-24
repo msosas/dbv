@@ -53,6 +53,7 @@
 </template>
 
 <script type="text/javascript">
+var baseUrl = 'http://localhost:4001'
 import axios from 'axios'
 import { Loading, Notify } from 'quasar'
 export default {
@@ -65,33 +66,40 @@ export default {
   },
   methods: {
     commit () {
-      Loading.show({ delay: 0 })
-      axios.post('http://localhost:4001/commit', 'message=' + this.message)
-        .then(({ data }) => {
-          console.log(data)
-          if (data === 'OK') {
-            Notify.create({
-              message: data,
-              color: 'positive'
-            })
-            Loading.hide()
-          } else {
-            Notify.create({
-              message: data,
-              color: 'warning'
-            })
-            Loading.hide()
-          }
+      if (this.message === '') {
+        Notify.create({
+          message: 'Escriba un mensaje para su commit',
+          color: 'negative'
         })
-        .catch(error => {
-          Notify.create('Error:' + error)
-          console.log(error)
-          Loading.hide()
-        })
+      } else {
+        Loading.show({ delay: 0 })
+        axios.post(baseUrl + '/commit', 'message=' + this.message)
+          .then(({ data }) => {
+            console.log(data)
+            if (data === 'OK') {
+              Notify.create({
+                message: data,
+                color: 'positive'
+              })
+              Loading.hide()
+            } else {
+              Notify.create({
+                message: data,
+                color: 'warning'
+              })
+              Loading.hide()
+            }
+          })
+          .catch(error => {
+            Notify.create('Ocurrió un error, no se puede hacer commit')
+            console.log(error)
+            Loading.hide()
+          })
+      }
     },
     rollback () {
       Loading.show({ delay: 0 })
-      axios.post('http://localhost:4001/rollback')
+      axios.post(baseUrl + '/rollback')
         .then(({ data }) => {
           if (data === 'OK') {
             Notify.create({
@@ -103,7 +111,7 @@ export default {
           }
         })
         .catch(error => {
-          Notify.create('Error:' + error)
+          Notify.create('Ocurrió un error, no se puede hacer rollback')
           console.log(error)
         })
     },
@@ -111,7 +119,7 @@ export default {
     push (branch) {
       Loading.show({ delay: 0 })
       console.log('test')
-      axios.post('http://localhost:4001/push', 'localBranch=' + branch)
+      axios.post(baseUrl + '/push', 'localBranch=' + branch)
         .then(({ data }) => {
           Notify.create({
             message: data,
@@ -120,13 +128,13 @@ export default {
           Loading.hide()
         })
         .catch(error => {
-          Notify.create('Error:' + error)
+          Notify.create('Ocurrió un error, no se puede hacer push')
           console.log(error)
           Loading.hide()
         })
     },
     getBranches () {
-      axios.get('http://localhost:4001/get_branches')
+      axios.get(baseUrl + '/get_branches')
         .then(({ data }) => {
           this.branches = data
           for (var i = 0; i < this.branches.length; i++) {
@@ -134,6 +142,11 @@ export default {
               this.branch = this.branches[i].slice(2)
             }
           }
+        })
+        .catch(error => {
+          Notify.create('Ocurrió un error, no se pueden obtener los branches')
+          console.log(error)
+          Loading.hide()
         })
     },
     selectBranch (branch) {

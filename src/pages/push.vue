@@ -35,6 +35,7 @@
 </template>
 
 <script>
+var baseUrl = 'http://localhost:4001'
 import axios from 'axios'
 import { Loading, Notify } from 'quasar'
 export default {
@@ -46,9 +47,9 @@ export default {
   },
   methods: {
     push (branch) {
-      // Loading.show({ delay: 0 })
+      Loading.show({ delay: 0 })
       console.log('test')
-      axios.post('http://localhost:4001/push', 'localBranch=' + branch)
+      axios.post(baseUrl + '/push', 'localBranch=' + branch)
         .then(({ data }) => {
           if (data !== '') {
             Notify.create({
@@ -59,13 +60,13 @@ export default {
           Loading.hide()
         })
         .catch(error => {
-          Notify.create('Error:' + error)
+          Notify.create('Ocurrió un error, no se puede hacer PUSH')
           console.log(error)
           Loading.hide()
         })
     },
     getBranchs () {
-      axios.get('http://localhost:4001/get_branches')
+      axios.get(baseUrl + '/get_branches')
         .then(({ data }) => {
           this.branchs = data
           if (this.branchs.length === 1) {

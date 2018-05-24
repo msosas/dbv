@@ -22,6 +22,7 @@
 </template>
 
 <script>
+var baseUrl = 'http://localhost:4001'
 import axios from 'axios'
 import { Loading, Notify } from 'quasar'
 export default {
@@ -33,7 +34,7 @@ export default {
   methods: {
     updateSchema () {
       Loading.show({ delay: 0 })
-      axios.get('http://localhost:4001/update_schema')
+      axios.get(baseUrl + '/update_schema')
         .then(({ data }) => {
           Notify.create({
             message: 'Schema Local actualizado',
@@ -42,14 +43,14 @@ export default {
           Loading.hide()
         })
         .catch(error => {
-          Notify.create('Error:' + error)
+          Notify.create('Ocurrió un error, no se puede actualizar el schema')
           console.log(error)
           Loading.hide()
         })
     },
     pull (branch) {
       Loading.show({ delay: 0 })
-      axios.get('http://localhost:4001/pull?branch=' + branch)
+      axios.get(baseUrl + '/pull?branch=' + branch)
         .then(({ data }) => {
           Notify.create({
             message: data,
@@ -59,8 +60,9 @@ export default {
           Loading.hide()
         })
         .catch(error => {
-          Notify.create(error)
+          Notify.create('Ocurrió un error, no se puede hacer PULL')
           console.log(error)
+          Loading.hide()
         })
     }
   }

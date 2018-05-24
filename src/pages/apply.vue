@@ -25,6 +25,7 @@
 </template>
 
 <script >
+var baseUrl = 'http://localhost:4001'
 import {
   Loading,
   Notify
@@ -40,7 +41,7 @@ export default {
   methods: {
     updateSchema () {
       Loading.show({ delay: 0 })
-      axios.get('http://localhost:4001/update_schema')
+      axios.get(baseUrl + '/update_schema')
         .then(({ data }) => {
           Notify.create({
             message: 'Schema Local actualizado',

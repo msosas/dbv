@@ -100,6 +100,7 @@
 </template>
 
 <script>
+var baseUrl = 'http://localhost:4001'
 import { Notify, Dialog, Loading } from 'quasar'
 import axios from 'axios'
 
@@ -123,19 +124,19 @@ export default {
       this.$router.push('/setup')
     },
     checkAPI () {
-      axios.get('http://localhost:4001/check')
+      axios.get(baseUrl + '/check')
         .then(({ data }) => {
           console.log(data)
         })
         .catch(error => {
-          Notify.create(error.toString())
+          Notify.create('No se detectó la API')
           console.log(error)
           Loading.hide()
         })
     },
     showSchemas () {
       Loading.show({ delay: 0 })
-      axios.get('http://localhost:4001/show_schemas')
+      axios.get(baseUrl + '/show_schemas')
         .then(({ data }) => {
           for (var i = 0; i < data.length; i++) {
             data[i].label = data[i].label.toUpperCase()
@@ -144,7 +145,7 @@ export default {
           Loading.hide()
         })
         .catch(error => {
-          Notify.create()
+          Notify.create('Ocurrió un error, no se pueden obtener los schemas')
           console.log(error)
           Loading.hide()
         })
@@ -163,17 +164,18 @@ export default {
         .then((data) => {
           this.connected = true
           this.dbName = data
-          axios.post('http://localhost:4001/set_db', 'db=' + this.dbName)
+          axios.post(baseUrl + '/set_db', 'db=' + this.dbName)
             .then(({ data }) => {
               console.log(data)
             })
+          this.getBranch()
         })
         .catch(() => {
           console.log('Canceled')
         })
     },
     getBranch () {
-      axios.get('http://localhost:4001/get_branches')
+      axios.get(baseUrl + '/get_branches')
         .then(({ data }) => {
           console.log(data)
           for (var i = 0; i < data.length; i++) {
@@ -183,10 +185,14 @@ export default {
           }
           this.branches = data
         })
+        .catch(error => {
+          Notify.create('Ocurrió un error, no se pueden obtener los branches')
+          console.log(error)
+        })
     },
     changeBranch (branch) {
       Loading.show({ delay: 0 })
-      axios.post('http://localhost:4001/change_branch', 'branch=' + branch)
+      axios.post(baseUrl + '/change_branch', 'branch=' + branch)
         .then(({ data }) => {
           this.currentBranch = branch
           this.getBranch()
@@ -203,7 +209,7 @@ export default {
     }
   },
   beforeCreate () {
-    axios.get('http://localhost:4001/get_db')
+    axios.get(baseUrl + '/get_db')
       .then(({ data }) => {
         if (data.name === 'mysql') {
           this.connected = false
@@ -219,7 +225,7 @@ export default {
     var that = this
     setInterval(function () {
       that.checkAPI()
-      axios.get('http://localhost:4001/get_db')
+      axios.get(baseUrl + '/get_db')
         .then(({ data }) => {
           if (data.name === 'mysql') {
             that.connected = false
@@ -229,6 +235,3 @@ export default {
   }
 }
 </script>
-
-<style>
-</style>

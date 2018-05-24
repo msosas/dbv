@@ -53,6 +53,7 @@
   }
 </style>
 <script>
+var baseUrl = 'http://localhost:4001'
 import axios from 'axios'
 import { Notify, Loading } from 'quasar'
 export default {
@@ -69,20 +70,21 @@ export default {
     },
     gitStatus () {
       Loading.show({ delay: 0 })
-      axios.get('http://localhost:4001/status_raw')
+      axios.get(baseUrl + '/status_raw')
         .then(({data}) => {
           this.files = data
           Loading.hide()
         })
         .catch(error => {
-          Notify.create('Error:' + error)
+          Notify.create('Ocurrió un error, no se puede hacer git status')
           console.log(error)
+          Loading.hide()
         })
     },
     showDifferences (file) {
       Loading.show({ delay: 0 })
       this.diffOpened = true
-      axios.get('http://localhost:4001/differences?file=' + file)
+      axios.get(baseUrl + '/differences?file=' + file)
         .then(({data}) => {
           console.log(data)
           if (data[0] !== '') {
@@ -93,21 +95,22 @@ export default {
           Loading.hide()
         })
         .catch(error => {
-          Notify.create('Error:' + error)
+          Notify.create('Ocurrió un error, no se pueden obtener las diferencias')
           console.log(error)
+          Loading.hide()
         })
     },
     generateFiles () {
       // Loading.show({ delay: 0 })
-      axios.get('http://localhost:4001/generate_files')
+      axios.get(baseUrl + '/generate_files')
         .then(({ data }) => {
           Loading.hide()
           console.log(data)
         })
         .catch(error => {
-          Notify.create(error)
+          Notify.create('Ocurrió un error, no se pueden generar los archivos')
           console.log(error)
-          // Loading.hide()
+          Loading.hide()
         })
     },
     refresh () {
@@ -122,7 +125,7 @@ export default {
       })
     },
     checkout () {
-      axios.get('http://localhost:4001/checkout')
+      axios.get(baseUrl + '/checkout')
         .then(({ data }) => {
           Notify.create({
             message: 'Cambios Descartados',
@@ -131,7 +134,7 @@ export default {
           this.refresh()
         })
         .catch(error => {
-          Notify.create('Error:' + error)
+          Notify.create('Ocurrió un error, no se pueden descartar los cambios')
           console.log(error)
         })
     }
