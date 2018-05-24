@@ -5,9 +5,9 @@
               Archivos Cambiados
             </h3>
             <div style="text-align: center;">
-              <span><q-btn icon="clear_all" color="deep-purple" label="Descartar" @click="checkout()"/></span>
-              <span><q-btn icon="done" color="positive" label="Commit" @click="goToCommit()"/></span>
               <span><q-btn icon="autorenew" color="dark" label="Actualizar" @click="refresh()"/></span>
+              <span><q-btn icon="done" color="positive" label="Commit" @click="goToCommit()"/></span>
+              <span><q-btn icon="clear_all" color="deep-purple" label="Descartar" @click="checkout()"/></span>
             </div>
             <q-list>
               <q-list-header>
