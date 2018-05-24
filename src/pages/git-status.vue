@@ -65,6 +65,22 @@ export default {
     }
   },
   methods: {
+    updateSchema () {
+      Loading.show({ delay: 0 })
+      axios.get(baseUrl + '/update_schema')
+        .then(({ data }) => {
+          Notify.create({
+            message: 'Schema Local actualizado',
+            color: 'positive'
+          })
+          Loading.hide()
+        })
+        .catch(error => {
+          Notify.create('Ocurrió un error, no se puede actualizar el schema')
+          console.log(error)
+          Loading.hide()
+        })
+    },
     goToCommit () {
       this.$router.push('/commit')
     },
@@ -132,6 +148,7 @@ export default {
             color: 'positive'
           })
           this.refresh()
+          this.updateSchema()
         })
         .catch(error => {
           Notify.create('Ocurrió un error, no se pueden descartar los cambios')

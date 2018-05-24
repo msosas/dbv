@@ -107,7 +107,6 @@ export default {
               color: 'positive'
             })
             Loading.hide()
-            Loading.hide()
           }
         })
         .catch(error => {
