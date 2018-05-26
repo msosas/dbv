@@ -100,11 +100,11 @@ export default {
         })
     },
     showDifferences (file) {
+      file = file.substring(1)
       Loading.show({ delay: 0 })
       this.diffOpened = true
       axios.get(baseUrl + '/differences?file=' + file)
         .then(({data}) => {
-          console.log(data)
           if (data[0] !== '') {
             this.changes = data
           } else {
@@ -119,10 +119,8 @@ export default {
         })
     },
     generateFiles () {
-      // Loading.show({ delay: 0 })
       axios.get(baseUrl + '/generate_files')
         .then(({ data }) => {
-          Loading.hide()
           console.log(data)
         })
         .catch(error => {
@@ -132,14 +130,14 @@ export default {
         })
     },
     refresh () {
-      Loading.show({ delay: 0 })
       var that = this
+      Loading.show({ delay: 0 })
       this.$nextTick(function () {
+        that.generateFiles()
         setTimeout(function () {
-          that.generateFiles()
           that.gitStatus()
           Loading.hide()
-        }, 1000)
+        }, 3200)
       })
     },
     checkout () {
