@@ -21,6 +21,7 @@
                 <q-item-main :label="file.change" />
                 <q-item-side right>
                   <q-btn round size="sm" icon="visibility" @click="showDifferences(file.change)"/>
+                  <q-btn round size="sm" icon="delete" disable />
                 </q-item-side>
               </q-item>
             </q-list>
@@ -106,6 +107,11 @@ export default {
       this.diffOpened = true
       axios.get(baseUrl + '/differences?file=' + file)
         .then(({data}) => {
+          if (data[0][0] + data[0][1] + data[0][2] + data[0][3] !== 'diff') {
+            this.newFile = true
+          } else {
+            this.newFile = false
+          }
           this.changes = data
           Loading.hide()
         })
