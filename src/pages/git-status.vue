@@ -30,7 +30,7 @@
                 style="padding-left: 2%;"
                 v-for="change in changes"
                 :key="change"
-                :class="{ 'new-line': change[0] === '+', 'removed-line': change[0] === '-' }"
+                :class="{ 'new-line': change[0] === '+' || newFile, 'removed-line': change[0] === '-' }"
                 v-html="change"
               >
               {{ change }}
@@ -63,7 +63,8 @@ export default {
     return {
       files: [],
       changes: '',
-      diffOpened: false
+      diffOpened: false,
+      newFile: false
     }
   },
   methods: {
@@ -105,11 +106,7 @@ export default {
       this.diffOpened = true
       axios.get(baseUrl + '/differences?file=' + file)
         .then(({data}) => {
-          if (data[0] !== '') {
-            this.changes = data
-          } else {
-            this.changes = ''
-          }
+          this.changes = data
           Loading.hide()
         })
         .catch(error => {
@@ -147,7 +144,9 @@ export default {
             message: 'Cambios Descartados',
             color: 'positive'
           })
-          this.refresh()
+          this.$nextTick(function () {
+            this.gitStatus()
+          })
           this.updateSchema()
         })
         .catch(error => {
