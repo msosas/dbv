@@ -66,7 +66,6 @@ export default {
       Loading.show({ delay: 0 })
       axios.get(baseUrl + '/server_info')
         .then(({ data }) => {
-          console.log(data)
           this.connectionInfo.repoPath = data[0]
           this.connectionInfo.server = data[1]
           this.connectionInfo.port = data[2]

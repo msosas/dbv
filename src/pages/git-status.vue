@@ -21,7 +21,7 @@
                 <q-item-main :label="file.change" />
                 <q-item-side right>
                   <q-btn round size="sm" icon="visibility" @click="showDifferences(file.change)"/>
-                  <q-btn round size="sm" icon="delete" disable />
+                  <q-btn round size="sm" icon="delete" @click="deleteFile(file.change)" />
                 </q-item-side>
               </q-item>
             </q-list>
@@ -157,6 +157,22 @@ export default {
         })
         .catch(error => {
           Notify.create('Ocurrió un error, no se pueden descartar los cambios')
+          console.log(error)
+        })
+    },
+    deleteFile (file) {
+      axios.delete(baseUrl + '/delete_file', { data: { 'file': file.substring(1) } })
+        .then(({ data }) => {
+          Notify.create({
+            message: 'Archivo borrado',
+            color: 'positive'
+          })
+          this.$nextTick(function () {
+            this.gitStatus()
+          })
+        })
+        .catch(error => {
+          Notify.create('Ocurrió un error, no se puede borrar el archivo')
           console.log(error)
         })
     }
