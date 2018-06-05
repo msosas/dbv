@@ -16,7 +16,7 @@
               <q-item
                 :class="{ 'bg-warning': 'M' === file.type, 'bg-negative': 'D' === file.type, 'bg-positive': '?' === file.type  }"
                 v-for="file in files"
-                :key="file.change"
+                :key="file.change.key"
               >
                 <q-item-main :label="file.change" />
                 <q-item-side right>
@@ -89,7 +89,6 @@ export default {
       this.$router.push('/commit')
     },
     gitStatus () {
-      Loading.show({ delay: 0 })
       axios.get(baseUrl + '/status_raw')
         .then(({data}) => {
           this.files = data
@@ -121,10 +120,11 @@ export default {
           Loading.hide()
         })
     },
-    generateFiles () {
+    generateFiles (callback) {
       axios.get(baseUrl + '/generate_files')
         .then(({ data }) => {
           console.log(data)
+          callback(null, 'OK')
         })
         .catch(error => {
           Notify.create('Ocurrió un error, no se pueden generar los archivos')
@@ -134,13 +134,15 @@ export default {
     },
     refresh () {
       var that = this
+      this.files = []
       Loading.show({ delay: 0 })
       this.$nextTick(function () {
-        that.generateFiles()
-        setTimeout(function () {
-          that.gitStatus()
-          Loading.hide()
-        }, 3200)
+        that.generateFiles(function () {
+          setTimeout(function () {
+            that.gitStatus()
+            Loading.hide()
+          }, 500)
+        })
       })
     },
     checkout () {
