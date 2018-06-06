@@ -58,7 +58,7 @@
 <script>
 var baseUrl = 'http://localhost:4001'
 import axios from 'axios'
-import { Notify, Loading } from 'quasar'
+import { Notify, Loading, QSpinnerPuff } from 'quasar'
 export default {
   data () {
     return {
@@ -135,13 +135,18 @@ export default {
     refresh () {
       var that = this
       this.files = []
-      Loading.show({ delay: 0 })
+      Loading.show({
+        spinner: QSpinnerPuff,
+        spinnerSize: 250,
+        delay: 0,
+        message: 'Generando archivos...'
+      })
       this.$nextTick(function () {
         that.generateFiles(function () {
           setTimeout(function () {
             that.gitStatus()
             Loading.hide()
-          }, 500)
+          }, 100)
         })
       })
     },

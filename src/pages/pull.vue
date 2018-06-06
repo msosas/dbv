@@ -24,7 +24,7 @@
 <script>
 var baseUrl = 'http://localhost:4001'
 import axios from 'axios'
-import { Loading, Notify } from 'quasar'
+import { Loading, Notify, QSpinnerPuff } from 'quasar'
 export default {
   data () {
     return {
@@ -33,7 +33,12 @@ export default {
   },
   methods: {
     updateSchema () {
-      Loading.show({ delay: 0 })
+      Loading.show({
+        spinner: QSpinnerPuff,
+        spinnerSize: 250,
+        delay: 0,
+        message: 'Aplicando archivos...'
+      })
       axios.get(baseUrl + '/update_schema')
         .then(({ data }) => {
           Notify.create({
@@ -49,7 +54,12 @@ export default {
         })
     },
     pull (branch) {
-      Loading.show({ delay: 0 })
+      Loading.show({
+        spinner: QSpinnerPuff,
+        spinnerSize: 250,
+        delay: 0,
+        message: 'Haciendo pull...'
+      })
       axios.get(baseUrl + '/pull?branch=' + branch)
         .then(({ data }) => {
           Notify.create({

@@ -1,7 +1,7 @@
 <template>
   <q-page class="flex justify-center" >
       <div style="width: 80%;">
-        <h3 style="text-align: center;">Commit</h3>
+        <h3 style="text-align: center;">Commit & Push</h3>
         <q-list>
           <q-list-header>Mensaje</q-list-header>
           <q-item>
@@ -17,34 +17,7 @@
             <q-item-main style="text-align: center;">
               <q-btn icon="check" label="Aplicar" color="positive" @click="commit()"/>
               <q-btn icon="settings_backup_restore" label="Rollback" @click="rollback()" color="deep-purple" />
-            </q-item-main>
-          </q-item>
-        </q-list>
-        <h3 style="text-align: center;">Push</h3>
-        <q-list>
-          <q-list-header>Desde el local: </q-list-header>
-          <q-item>
-            <q-item-side>
-              <q-input type="text" v-model="branch" />
-            </q-item-side>
-            <q-item-main>
-              <q-btn-dropdown label="Branch">
-                <!-- dropdown content -->
-                <q-list link>
-                  <q-item v-for="branch in branches" :key="branch" close-overlay @click.native="selectBranch(branch)">
-                    <q-item-main>
-                      <q-item-tile label>{{ branch }}</q-item-tile>
-                    </q-item-main>
-                  </q-item>
-                </q-list>
-              </q-btn-dropdown>
-            </q-item-main>
-            <q-field>
-            </q-field>
-          </q-item>
-          <q-item style="text-align: center">
-            <q-item-main>
-              <q-btn icon="cloud_upload" label="Push" color="positive" @click="push(branch)"/>
+              <q-btn icon="cloud_upload" label="Push" color="warning" @click="push()"/>
             </q-item-main>
           </q-item>
         </q-list>
@@ -55,7 +28,7 @@
 <script type="text/javascript">
 var baseUrl = 'http://localhost:4001'
 import axios from 'axios'
-import { Loading, Notify } from 'quasar'
+import { Loading, Notify, QSpinnerPuff } from 'quasar'
 export default {
   data () {
     return {
@@ -115,10 +88,15 @@ export default {
         })
     },
     // PUSH
-    push (branch) {
-      Loading.show({ delay: 0 })
+    push () {
+      Loading.show({
+        spinner: QSpinnerPuff,
+        spinnerSize: 250,
+        delay: 0,
+        message: 'Haciendo push...'
+      })
       console.log('test')
-      axios.post(baseUrl + '/push', 'localBranch=' + branch)
+      axios.post(baseUrl + '/push', 'localBranch=' + this.branch)
         .then(({ data }) => {
           Notify.create({
             message: 'OK',
