@@ -3,11 +3,11 @@
     <div>
         <h3>Estado de la Conexión</h3>
         <q-list highlight>
-          <q-list-header>MySQL</q-list-header>
+          <q-list-header>MySQL Server Config</q-list-header>
           <q-item>
             <q-item-side>
               <q-item-tile icon>
-                <q-icon name="business" />
+                <q-icon name="business" size="2em" />
               </q-item-tile>
             </q-item-side>
             <q-item-main :label="connectionInfo.server" />
@@ -15,7 +15,7 @@
           <q-item>
             <q-item-side>
               <q-item-tile icon>
-                <q-icon name="bubble_chart" />
+                <q-icon name="bubble_chart" size="2em" />
               </q-item-tile>
             </q-item-side>
             <q-item-main :label="connectionInfo.port" />
@@ -25,7 +25,7 @@
           <q-item>
             <q-item-side>
               <q-item-tile icon>
-                <q-icon name="pie_chart" />
+                <q-icon name="pie_chart" size="2em" />
               </q-item-tile>
             </q-item-side>
             <q-item-main :label="connectionInfo.db.name" />
@@ -35,7 +35,7 @@
           <q-item>
             <q-item-side>
               <q-item-tile icon>
-                <q-icon name="folder_open" />
+                <q-icon name="folder_open" size="2em" />
               </q-item-tile>
             </q-item-side>
             <q-item-main :label="connectionInfo.repoPath" />

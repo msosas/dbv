@@ -3,19 +3,31 @@
       <div style="width: 80%;">
         <h3 style="text-align: center;">Actualizar Repositorio Local</h3>
         <q-list>
-          <q-list-header>Desde Upstream: </q-list-header>
-          <q-item>
-            <q-item-side right>
-              <q-btn icon="arrow_downward" @click="pull('development')" />
-            </q-item-side>
-            <q-item-main label="Development" />
-          </q-item>
-          <q-item>
-            <q-item-side right>
-              <q-btn icon="arrow_downward" @click="pull('master')" />
-            </q-item-side>
-            <q-item-main label="Master" />
-          </q-item>
+          <div style="text-align: center;">
+            <q-list-header>Desde Upstream: </q-list-header>
+            <q-item>
+              <q-btn
+                icon="arrow_downward"
+                @click="pull('development')"
+                label="Development"
+                color="positive"
+                push
+                size="md"
+                style="margin: auto;"
+              />
+            </q-item>
+            <q-item>
+              <q-btn
+                icon="arrow_downward"
+                @click="pull('master')"
+                label="Master"
+                color="positive"
+                push
+                size="md"
+                style="margin: auto;"
+              />
+            </q-item>
+          </div>
         </q-list>
       </div>
   </q-page>
